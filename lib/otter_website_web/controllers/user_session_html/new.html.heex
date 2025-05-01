@@ -2,15 +2,11 @@
   <.header class="text-center">
     Log in to account
     <:subtitle>
-      Don't have an account?
-      <.link navigate={~p"/users/register"} class="font-semibold text-brand hover:underline">
-        Sign up
-      </.link>
-      for an account now.
+      Accounts are created on an invite-only basis.
     </:subtitle>
   </.header>
 
-  <.simple_form :let={f} for={@conn.params["user"]} as={:user} action={~p"/users/log_in"}>
+  <.simple_form :let={f} for={@conn.params["user"]} as={:user} action={~p"/admin/log_in"}>
     <.error :if={@error_message}>{@error_message}</.error>
 
     <.input field={f[:email]} type="email" label="Email" required />
@@ -18,9 +14,6 @@
 
     <:actions :let={f}>
       <.input field={f[:remember_me]} type="checkbox" label="Keep me logged in" />
-      <.link href={~p"/users/reset_password"} class="text-sm font-semibold">
-        Forgot your password?
-      </.link>
     </:actions>
     <:actions>
       <.button phx-disable-with="Logging in..." class="w-full">
