@@ -4,6 +4,6 @@ defmodule OtterWebsiteWeb.PageController do
 
   def home(conn, _params) do
     posts = Announcements.all_posts()
-    render(conn, :home, layout: false, posts: posts)
+    render(conn, :home, posts: posts)
   end
 end
