@@ -1,7 +1,7 @@
 <.flash_group flash={@flash} />
 
-<div class="flex flex-col gap-y-12"> <!-- FIXME surely this does not work for mobile viewport -->
-  <div class="w-screen bg-gray-200 flex items-center justify-center gap-12">
+<div class="flex flex-col gap-y-12 p-x-8">
+  <div class="w-screen bg-gray-200 flex items-center justify-center gap-12"> <!-- FIXME surely this does not work for mobile viewport -->
     <img src="/images/logo.png" class="w-48"/>
     <div class="text-center py-12 w-80">
       <h1 class="text-4xl font-extrabold">OTTER</h1>
@@ -37,8 +37,25 @@
     </div>
   </div>
 
-  <div class="w-screen flex flex-col items-center justify-center gap-y-4 p-4">
+  <div class="w-screen flex flex-col items-center justify-center gap-y-8 px-12">
     <span class="text-xl font-semibold">Posts</span>
-    <!-- FIXME use NimblePublisher to list posts from markdown files -->
+
+    <%= for post <- @posts do %>
+      <div class="bg-gray-100 rounded-xl p-2 w-full">
+        <div class="flex flex-col p-2 rounded-xl">
+          <div class="flex justify-between items-center">
+            <span class="text-xl font-extrabold"><%= post.title %></span>
+            <span class="font-semibold"><%= post.author %></span>
+          </div>
+          <span class="text-gray-700"><%= post.description %></span>
+        </div>
+
+        <hr class="mb-2"/>
+
+        <article class="prose">
+          <div><%= raw(post.body) %></div>
+        </article>
+      </div>
+    <% end %>
   </div>
 </div>

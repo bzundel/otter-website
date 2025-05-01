@@ -35,3 +35,4 @@ otter_website-*.tar
 npm-debug.log
 /assets/node_modules/
 
+posts/
