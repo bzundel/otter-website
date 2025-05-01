@@ -18,7 +18,7 @@ defmodule OtterWebsiteWeb.UserSettingsController do
       {:ok, user} ->
         conn
         |> put_flash(:info, "Password updated successfully.")
-        |> put_session(:user_return_to, ~p"/users/settings")
+        |> put_session(:user_return_to, ~p"/admin/settings")
         |> UserAuth.log_in_user(user)
 
       {:error, changeset} ->
@@ -30,7 +30,6 @@ defmodule OtterWebsiteWeb.UserSettingsController do
     user = conn.assigns.current_user
 
     conn
-    |> assign(:email_changeset, Accounts.change_user_email(user))
     |> assign(:password_changeset, Accounts.change_user_password(user))
   end
 end

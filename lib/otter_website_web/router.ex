@@ -44,13 +44,13 @@ defmodule OtterWebsiteWeb.Router do
 
     get "/admin", AdminController, :home
 
-    get "/users/settings", UserSettingsController, :edit
-    put "/users/settings", UserSettingsController, :update
+    get "/admin/settings", UserSettingsController, :edit
+    put "/admin/settings", UserSettingsController, :update
   end
 
   scope "/", OtterWebsiteWeb do
     pipe_through [:browser]
 
-    delete "/users/log_out", UserSessionController, :delete
+    delete "/admin/log_out", UserSessionController, :delete
   end
 end
