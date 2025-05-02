@@ -117,6 +117,7 @@ defmodule OtterWebsiteWeb.Live.AdminLive do
     end
   end
 
+  # FIXME obsolete code found! will (probably if i don't forget) remove in next cleanup :)
   @impl true
   def handle_event("delete_key", %{"id" => id}, socket) do
     case Repo.one(from ik in InvitationKey, where: ik.id == ^id and is_nil(ik.used_by)) do

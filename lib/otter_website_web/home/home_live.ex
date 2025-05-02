@@ -24,7 +24,7 @@ defmodule OtterWebsiteWeb.Home.HomeLive do
             <% else %>
               <span class="text-lg font-semibold">{Calendar.strftime(@next_meetup.date, "%A, %Y-%m-%d, %I:%M %p")}</span>
               <span class="">Room: {@next_meetup.room}</span>
-              <.button class="m-2">Register a talk</.button>
+              <.button phx-click="show_register_talk_modal" class="m-2">Register a talk</.button>
             <% end %>
           </div>
       </div>
@@ -70,6 +70,15 @@ defmodule OtterWebsiteWeb.Home.HomeLive do
         <% end %>
       </div>
     </div>
+
+    <.modal :if={@show_register_talk_modal} id="register-talk-modal" show on_cancel={JS.push("close_register_talk_modal")}>
+      <.live_component
+        module={OtterWebsiteWeb.Home.Dialogs.RegisterTalkDialog}
+        id="register-talk-dialog"
+        title="Register a talk"
+        meetup_id={@next_meetup.id}
+      />
+    </.modal>
     """
   end
 
@@ -81,7 +90,27 @@ defmodule OtterWebsiteWeb.Home.HomeLive do
       socket
       |> assign(:next_meetup, next_meetup)
       |> assign(:posts, posts)
+      |> assign(:show_register_talk_modal, false)
 
     {:ok, socket}
+  end
+
+  @impl true
+  def handle_event("show_register_talk_modal", _params, socket) do
+    {:noreply, assign(socket, :show_register_talk_modal, true)}
+  end
+
+  def handle_event("close_register_talk_modal", _params, socket) do
+    {:noreply, assign(socket, :show_register_talk_modal, false)}
+  end
+
+  @impl true
+  def handle_info(:close_register_talk_modal, socket) do
+    socket =
+      socket
+      |> assign(:show_register_talk_modal, false)
+      |> put_flash(:info, "Successfully registered for a talk! See you there! :-)")
+
+    {:noreply, socket}
   end
 end

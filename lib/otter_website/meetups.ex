@@ -4,6 +4,7 @@ defmodule OtterWebsite.Meetups do
   """
 
   import Ecto.Query, warn: false
+  alias OtterWebsite.Meetups.Talk
   alias OtterWebsite.Repo
 
   alias OtterWebsite.Meetups.Meetup
@@ -65,6 +66,12 @@ defmodule OtterWebsite.Meetups do
     |> Repo.insert()
   end
 
+  def create_talk(attrs \\ %{}) do
+    %Talk{}
+    |> Talk.changeset(attrs)
+    |> Repo.insert()
+  end
+
   @doc """
   Updates a meetup.
 
@@ -110,5 +117,9 @@ defmodule OtterWebsite.Meetups do
   """
   def change_meetup(%Meetup{} = meetup, attrs \\ %{}) do
     Meetup.changeset(meetup, attrs)
+  end
+
+  def change_talk(%Talk{} = talk, attrs \\ %{}) do
+    Talk.changeset(talk, attrs)
   end
 end

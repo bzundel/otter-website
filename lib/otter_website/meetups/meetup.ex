@@ -6,6 +6,8 @@ defmodule OtterWebsite.Meetups.Meetup do
     field :date, :naive_datetime
     field :room, :string
 
+    has_many :talks, OtterWebsite.Meetups.Talk
+
     timestamps(type: :utc_datetime)
   end
 
