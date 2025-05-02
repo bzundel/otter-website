@@ -4,8 +4,8 @@ Website for the Frankfurt University of Applied Science's FLOSS-Meetup "OTTER", 
 
 ## Running instructions
 
-Run `mix setup` to install all necessary dependencies and start the server with `mix phx.server`.
+A running postgresql instance is required with username and password both being `postgres` (only for the time being, will be adaptable with environment variables in the future or can be changed in the file `config/dev.exs`). Then, run `mix deps.get` to install all relevant dependencies and `mix ecto.create` to generate the necessary database schema (running `mix ecto.migrate` may be necessary afterwards). To run the server, simple execute `mix phx.server` and the website will be reachable under `localhost:4000`.
 
-# Contribution demonstration
+### Note on package versions
 
-Hello this is ricardo and i am learning to contribute on github.
+If you are running Arch Linux, the `elixir` package should be sufficient. Debian-based distributions, on the other hand, are not as straightforward. A fairly recent version of Elixir and Erlang/OTP is required (which one specifically I'm not sure), which is not present in most Debian repositories. Fortunately, sufficiently recent versions of both packages can be found under https://www.erlang-solutions.com/downloads/. Recent testing has shown that installing Erlang/OTP version `27.3-1` and Elixir version `1.16.1_1` from the aforementioned website is recent enough to run the project.
