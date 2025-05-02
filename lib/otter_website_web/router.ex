@@ -20,7 +20,12 @@ defmodule OtterWebsiteWeb.Router do
   scope "/", OtterWebsiteWeb do
     pipe_through :browser
 
-    get "/", PageController, :home
+    live_session :home,
+      on_mount: [{OtterWebsiteWeb.UserAuth, :mount_current_user}] do
+
+      live "/", Home.HomeLive
+    end
+
   end
 
   # Other scopes may use custom stacks.
