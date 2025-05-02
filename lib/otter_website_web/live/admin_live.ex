@@ -1,6 +1,8 @@
 defmodule OtterWebsiteWeb.Live.AdminLive do
   import Ecto.Query
 
+  alias OtterWebsite.Meetups
+  alias OtterWebsite.Meetups.Meetup
   alias OtterWebsite.Accounts.InvitationKey
   alias OtterWebsite.Repo
 
@@ -14,7 +16,25 @@ defmodule OtterWebsiteWeb.Live.AdminLive do
         <span class="text-xl font-bold">Admin Board</span>
 
         <div class="flex flex-col gap-y-4 w-full">
-          <span class="text-md font-bold">Appointments</span>
+          <span class="text-md font-bold">Meetups</span>
+          <.button phx-click="show_create_meetup_modal">Create meetup</.button>
+
+          <%= if Enum.empty?(@meetups) do %>
+            <span class="text-center text-gray-600">No meetups found</span>
+          <% else %>
+            <%= for meetup <- @meetups do %>
+              <div class="flex gap-x-2">
+                <div class="flex justify-between grow bg-gray-100 rounded-xl p-2">
+                  {Calendar.strftime(meetup.date, "%a, %d. %B %Y, %I:%M %p")}
+                  <span>{meetup.room}</span>
+                  <!-- TODO show some indication if meetup is in the past (or don't show at all) -->
+                </div>
+                <.button class="bg-zinc-600 hover:bg-zinc-700">Show</.button>
+                <.button class="bg-red-600 hover:bg-red-700">Delete</.button>
+              </div>
+            <% end %>
+          <% end %>
+
         </div>
 
         <div class="flex flex-col gap-y-4 w-full">
@@ -36,13 +56,26 @@ defmodule OtterWebsiteWeb.Live.AdminLive do
         </div>
       </div>
     </div>
+
+    <.modal :if={@show_create_meetup_modal} id="create-appointment-modal" show on_cancel={JS.push("close_create_meetup_modal")}>
+      <.live_component
+        module={OtterWebsiteWeb.Admin.Dialogs.CreateMeetupDialog}
+        id="create-appointment-dialog"
+        title="Create new meetup"
+      />
+    </.modal>
     """
   end
 
   @impl true
   def mount(_params, _session, socket) do
+    meetups = Meetups.list_meetups_in_order()
     keys = Repo.all(InvitationKey)
-    socket = assign(socket, :keys, keys)
+    socket =
+      socket
+      |> assign(:meetups, meetups)
+      |> assign(:keys, keys)
+      |> assign(:show_create_meetup_modal, false)
 
     {:ok, socket}
   end
@@ -76,5 +109,23 @@ defmodule OtterWebsiteWeb.Live.AdminLive do
           {:error, _} -> {:noreply, put_flash(socket, :error, "An error occurred while attempting to delete the key")}
         end
     end
+  end
+
+  # Create meetup events
+  def handle_event("show_create_meetup_modal", _params, socket) do
+    {:noreply, assign(socket, :show_create_meetup_modal, true)}
+  end
+
+  def handle_event("close_create_meetup_modal", _params, socket) do
+    {:noreply, assign(socket, :show_create_meetup_modal, false)}
+  end
+
+  @impl true
+  def handle_info(:close_create_meetup_modal, socket) do
+    socket =
+      socket
+      |> assign(:show_create_meetup_modal, false)
+      |> assign(:meetups, Meetups.list_meetups_in_order) # FIXME use update/3 here?
+    {:noreply, socket}
   end
 end
