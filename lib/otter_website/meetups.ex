@@ -46,7 +46,9 @@ defmodule OtterWebsite.Meetups do
       ** (Ecto.NoResultsError)
 
   """
-  def get_meetup!(id), do: Repo.get!(Meetup, id)
+  def get_meetup!(id), do: Repo.get!(Meetup, id) |> Repo.preload(:talks)
+
+  def get_talk!(id), do: Repo.get!(Talk, id)
 
   @doc """
   Creates a meetup.

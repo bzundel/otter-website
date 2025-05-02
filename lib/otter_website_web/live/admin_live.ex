@@ -30,7 +30,11 @@ defmodule OtterWebsiteWeb.Live.AdminLive do
                   <span>{meetup.room}</span>
                   <!-- TODO show some indication if meetup is in the past (or don't show at all) -->
                 </div>
-                <.button class="bg-zinc-600 hover:bg-zinc-700">Show</.button>
+                <.button class="bg-zinc-600 hover:bg-zinc-700"
+                  phx-click="show_meetup_details_modal"
+                  phx-value-id={meetup.id}>
+                  Show
+                </.button>
                 <.button class="bg-red-600 hover:bg-red-700"
                   phx-click="show_confirm_delete_item_dialog"
                   phx-value-id={meetup.id}
@@ -77,6 +81,14 @@ defmodule OtterWebsiteWeb.Live.AdminLive do
       />
     </.modal>
 
+    <.modal :if={@show_meetup_details_modal} id="meetup_details-modal" show on_cancel={JS.push("close_meetup_details_modal")}>
+      <.live_component
+        module={OtterWebsiteWeb.Admin.Dialogs.MeetupDetailsDialog}
+        id="meetup-details-dialog"
+        meetup_id={@meetup_details_id}
+      />
+    </.modal>
+
     <.modal :if={@show_confirm_delete_modal} id="confirm-delete-modal" show on_cancel={JS.push("close_confirm_delete_modal")}>
       <.live_component
         module={OtterWebsiteWeb.Dialogs.ConfirmDialog}
@@ -96,9 +108,11 @@ defmodule OtterWebsiteWeb.Live.AdminLive do
       |> assign(:meetups, meetups)
       |> assign(:keys, keys)
       |> assign(:show_create_meetup_modal, false)
+      |> assign(:show_meetup_details_modal, false)
       |> assign(:show_confirm_delete_modal, false)
       |> assign(:confirm_delete_message, "")
       |> assign(:item_id_to_delete, nil)
+      |> assign(:meetup_details_id, nil)
 
     {:ok, socket}
   end
@@ -151,6 +165,24 @@ defmodule OtterWebsiteWeb.Live.AdminLive do
       |> assign(:show_create_meetup_modal, false)
       |> reloader(Meetup)
     {:noreply, socket}
+  end
+
+  # Show meetup details
+  def handle_event("show_meetup_details_modal", %{"id" => id}, socket) do
+    socket =
+      socket
+      |> assign(:show_meetup_details_modal, true)
+      |> assign(:meetup_details_id, id)
+
+    {:noreply, socket}
+  end
+
+  def handle_event("close_meetup_details_modal", _params, socket) do
+    {:noreply, assign(socket, :show_meetup_details_modal, false)}
+  end
+
+  def handle_info(:close_meetup_details_modal, socket) do
+    {:noreply, assign(socket, :show_meetup_details_modal, false)}
   end
 
   # Confirm delete
