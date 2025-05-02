@@ -10,12 +10,16 @@
   </div>
 
   <div class="w-screen flex flex-col items-center justify-center gap-y-4">
-    <h1 class="text-xl font-semibold">Next meetup</h1> <!-- FIXME do this dynamically -->
-    <div class="bg-gray-100 rounded-xl p-8 flex flex-col">
-      <span class="text-lg font-semibold">Thursday, 2025-05-08</span>
-      <span class="">Room: 1-237</span>
-      <.button class="m-2">Register a talk</.button>
-    </div>
+    <h1 class="text-xl font-semibold">Next meetup</h1>
+      <div class="bg-gray-100 rounded-xl p-8 flex flex-col">
+        <%= if is_nil(@next_meetup) do %>
+          <span class="text-gray-600">No upcoming meetup</span>
+        <% else %>
+          <span class="text-lg font-semibold">{Calendar.strftime(@next_meetup.date, "%A, %Y-%m-%d, %I:%M %p")}</span>
+          <span class="">Room: {@next_meetup.room}</span>
+          <.button class="m-2">Register a talk</.button>
+        <% end %>
+      </div>
   </div>
 
   <div class="w-screen flex flex-col items-center justify-center gap-y-4 bg-gray-100 p-4">

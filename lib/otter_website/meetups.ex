@@ -25,6 +25,12 @@ defmodule OtterWebsite.Meetups do
     Repo.all(from m in Meetup, order_by: [asc: m.date])
   end
 
+  def get_upcoming_meetup do
+    now = NaiveDateTime.utc_now() # FIXME must be rewritten with timezone-awareness, but requires change in database from naive to something with timezone
+
+    Repo.one(from m in Meetup, where: m.date > ^now, order_by: [asc: m.date], limit: 1)
+  end
+
   @doc """
   Gets a single meetup.
 
