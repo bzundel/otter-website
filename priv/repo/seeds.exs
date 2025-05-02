@@ -1,11 +1,6 @@
-# Script for populating the database. You can run it as:
-#
-#     mix run priv/repo/seeds.exs
-#
-# Inside the script, you can read and write to any of your
-# repositories directly:
-#
-#     OtterWebsite.Repo.insert!(%OtterWebsite.SomeSchema{})
-#
-# We recommend using the bang functions (`insert!`, `update!`
-# and so on) as they will fail if something goes wrong.
+alias OtterWebsite.Repo
+alias OtterWebsite.Accounts.InvitationKey
+
+unless Repo.exists?(InvitationKey) do
+  Repo.insert!(%InvitationKey{key: "INITIAL_ADMIN_KEY"})
+end
