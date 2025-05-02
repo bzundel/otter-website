@@ -164,6 +164,9 @@ defmodule OtterWebsite.Accounts do
     :ok
   end
 
+  def list_invitation_keys() do
+    Repo.all(InvitationKey)
+  end
 
   def valid_invitation_key?(nil), do: false
   def valid_invitation_key?(key) do

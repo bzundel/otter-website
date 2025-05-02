@@ -7,10 +7,9 @@ defmodule OtterWebsiteWeb.Dialogs.ConfirmDialog do
     <div>
       <.header>
         {@title}
-        <:subtitle>{@subtitle}</:subtitle>
       </.header>
 
-      <div class="flex justify-end gap-x-2">
+      <div class="flex justify-end gap-x-2 mt-4">
         <.button phx-click="confirm" phx-target={@myself} phx-value-answer="true">Confirm</.button>
         <.button phx-click="confirm" phx-target={@myself} phx-value-answer="false">Cancel</.button>
       </div>

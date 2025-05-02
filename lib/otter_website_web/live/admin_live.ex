@@ -1,6 +1,7 @@
 defmodule OtterWebsiteWeb.Live.AdminLive do
   import Ecto.Query
 
+  alias OtterWebsite.Accounts
   alias OtterWebsite.Meetups
   alias OtterWebsite.Meetups.Meetup
   alias OtterWebsite.Accounts.InvitationKey
@@ -30,7 +31,13 @@ defmodule OtterWebsiteWeb.Live.AdminLive do
                   <!-- TODO show some indication if meetup is in the past (or don't show at all) -->
                 </div>
                 <.button class="bg-zinc-600 hover:bg-zinc-700">Show</.button>
-                <.button class="bg-red-600 hover:bg-red-700">Delete</.button>
+                <.button class="bg-red-600 hover:bg-red-700"
+                  phx-click="show_confirm_delete_item_dialog"
+                  phx-value-id={meetup.id}
+                  phx-value-message="Are you sure you want to delete this meetup?"
+                  phx-value-type={Meetup}>
+                  Delete
+                </.button>
               </div>
             <% end %>
           <% end %>
@@ -47,7 +54,12 @@ defmodule OtterWebsiteWeb.Live.AdminLive do
 
               <%= if is_nil(key.used_by) do %>
                 <span class="text-sm">-</span>
-                <.button phx-click="delete_key" phx-value-id={key.id}>Delete</.button>
+                <.button phx-click="show_confirm_delete_item_dialog"
+                  phx-value-id={key.id}
+                  phx-value-type={InvitationKey}
+                  phx-value-message="Are you sure you want to delete this invitation key?">
+                  Delete
+                </.button>
               <% else %>
                 <span class="text-sm font-bold">{key.used_by}</span>
               <% end %>
@@ -64,18 +76,29 @@ defmodule OtterWebsiteWeb.Live.AdminLive do
         title="Create new meetup"
       />
     </.modal>
+
+    <.modal :if={@show_confirm_delete_modal} id="confirm-delete-modal" show on_cancel={JS.push("close_confirm_delete_modal")}>
+      <.live_component
+        module={OtterWebsiteWeb.Dialogs.ConfirmDialog}
+        id="confirm-delete-dialog"
+        title={@confirm_delete_message}
+      />
+    </.modal>
     """
   end
 
   @impl true
   def mount(_params, _session, socket) do
     meetups = Meetups.list_meetups_in_order()
-    keys = Repo.all(InvitationKey)
+    keys = Accounts.list_invitation_keys()
     socket =
       socket
       |> assign(:meetups, meetups)
       |> assign(:keys, keys)
       |> assign(:show_create_meetup_modal, false)
+      |> assign(:show_confirm_delete_modal, false)
+      |> assign(:confirm_delete_message, "")
+      |> assign(:item_id_to_delete, nil)
 
     {:ok, socket}
   end
@@ -87,7 +110,7 @@ defmodule OtterWebsiteWeb.Live.AdminLive do
       {:ok, key} ->
         socket =
           socket
-          |> assign(:keys, socket.assigns.keys ++ [key])
+          |> reloader(InvitationKey)
           |> put_flash(:info, "Key generated successfully")
         {:noreply, socket}
       {:error, _} -> {:noreply, put_flash(socket, :error, "Something went wrong while generating a new key")}
@@ -125,7 +148,56 @@ defmodule OtterWebsiteWeb.Live.AdminLive do
     socket =
       socket
       |> assign(:show_create_meetup_modal, false)
-      |> assign(:meetups, Meetups.list_meetups_in_order) # FIXME use update/3 here?
+      |> reloader(Meetup)
     {:noreply, socket}
   end
+
+  # Confirm delete
+  def handle_event("show_confirm_delete_item_dialog", %{"id" => id, "type" => type, "message" => message}, socket) do
+    IO.inspect(type, label: "Type to delete")
+    socket =
+      socket
+      |> assign(:confirm_delete_message, message)
+      |> assign(:show_confirm_delete_modal, true)
+      |> assign(:item_id_to_delete, id)
+      |> assign(:item_type_to_delete, type)
+    {:noreply, socket}
+  end
+
+  def handle_event("close_confirm_delete_modal", _params, socket) do
+    {:noreply, assign(socket, :show_confirm_delete_modal, false)}
+  end
+
+  @impl true
+  def handle_info({OtterWebsiteWeb.Dialogs.ConfirmDialog, value}, socket) do
+    module = socket.assigns.item_type_to_delete |> String.split(".") |> Module.concat()
+    socket =
+      case value do
+        true ->
+          id = String.to_integer(socket.assigns.item_id_to_delete)
+
+          case Repo.one(from item in module, where: item.id == ^id) do
+            nil -> put_flash(socket, :error, "Something went wrong while trying to delete the item")
+            item ->
+              Repo.delete(item)
+              put_flash(socket, :info, "Successfully deleted item")
+          end
+
+        false ->
+          socket
+      end
+
+    socket =
+      socket
+      |> assign(:show_confirm_delete_modal, false)
+      |> assign(:item_id_to_delete, nil)
+      |> assign(:item_type_to_delete, nil)
+      |> reloader(module)
+
+    {:noreply, socket}
+  end
+
+  defp reloader(socket, Meetup), do: assign(socket, :meetups, Meetups.list_meetups_in_order())
+  defp reloader(socket, InvitationKey), do: assign(socket, :keys, Accounts.list_invitation_keys())
+  defp reloader(socket, _), do: socket
 end
