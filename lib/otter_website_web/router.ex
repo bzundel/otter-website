@@ -42,7 +42,11 @@ defmodule OtterWebsiteWeb.Router do
   scope "/", OtterWebsiteWeb do
     pipe_through [:browser, :require_authenticated_user]
 
-    get "/admin", AdminController, :home
+    live_session :admin,
+      on_mount: [{OtterWebsiteWeb.UserAuth, :mount_current_user}] do
+
+      live "/admin", Live.AdminLive
+    end
 
     get "/admin/settings", UserSettingsController, :edit
     put "/admin/settings", UserSettingsController, :update
