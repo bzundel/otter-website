@@ -8,26 +8,33 @@
     </div>
     <div class="flex items-center gap-4 font-semibold leading-6 text-zinc-900">
       <%= if @current_user do %>
+        <a
+          href={~p"/admin"}
+          class="rounded-lg bg-zinc-100 px-2 py-1 hover:bg-zinc-200/80"
+        >
+          Admin Board <span aria-hidden="true">&rarr;</span>
+        </a>
+
+        <a
+          href={~p"/admin/settings"}
+          class="rounded-lg bg-zinc-100 px-2 py-1 hover:bg-zinc-200/80"
+        >
+          Settings <span aria-hidden="true">&rarr;</span>
+        </a>
+
         <.link
           href={~p"/admin/log_out"}
           method="delete"
           class="rounded-lg bg-zinc-100 px-2 py-1 hover:bg-zinc-200/80"
         >
-          Log out<span aria-hidden="true">&rarr;</span>
+          Log out <span aria-hidden="true">&rarr;</span>
         </.link>
-
-        <a
-          href={~p"/admin"}
-          class="rounded-lg bg-zinc-100 px-2 py-1 hover:bg-zinc-200/80"
-        >
-          Admin Board<span aria-hidden="true">&rarr;</span>
-        </a>
       <% else %>
         <a
           href={~p"/admin/log_in"}
           class="rounded-lg bg-zinc-100 px-2 py-1 hover:bg-zinc-200/80"
         >
-          Log in<span aria-hidden="true">&rarr;</span>
+          Log in <span aria-hidden="true">&rarr;</span>
         </a>
       <% end %>
     </div>
