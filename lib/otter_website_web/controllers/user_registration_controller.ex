@@ -7,7 +7,7 @@ defmodule OtterWebsiteWeb.UserRegistrationController do
 
   def new(conn, _params) do
     changeset = Accounts.change_user_registration(%User{})
-    render(conn, :new, changeset: changeset)
+    render(conn, :new, changeset: changeset, page_title: "Register")
   end
 
   def create(conn, %{"user" => user_params}) do

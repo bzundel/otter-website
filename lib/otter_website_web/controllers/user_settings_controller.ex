@@ -7,7 +7,7 @@ defmodule OtterWebsiteWeb.UserSettingsController do
   plug :assign_email_and_password_changesets
 
   def edit(conn, _params) do
-    render(conn, :edit)
+    render(conn, :edit, page_title: "Account settings")
   end
 
   def update(conn, %{"action" => "update_password"} = params) do

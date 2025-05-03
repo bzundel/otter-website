@@ -83,6 +83,7 @@ defmodule OtterWebsiteWeb.Home.HomeLive do
     posts = Announcements.all_posts()
     socket =
       socket
+      |> assign(:page_title, "Home")
       |> assign(:next_meetup, next_meetup)
       |> assign(:posts, posts)
       |> assign(:show_register_talk_modal, false)

@@ -5,7 +5,7 @@ defmodule OtterWebsiteWeb.UserSessionController do
   alias OtterWebsiteWeb.UserAuth
 
   def new(conn, _params) do
-    render(conn, :new, error_message: nil)
+    render(conn, :new, error_message: nil, page_title: "Log in")
   end
 
   def create(conn, %{"user" => user_params}) do

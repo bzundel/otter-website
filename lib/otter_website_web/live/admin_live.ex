@@ -105,6 +105,7 @@ defmodule OtterWebsiteWeb.Live.AdminLive do
     keys = Accounts.list_invitation_keys()
     socket =
       socket
+      |> assign(:page_title, "Admin board")
       |> assign(:meetups, meetups)
       |> assign(:keys, keys)
       |> assign(:show_create_meetup_modal, false)
