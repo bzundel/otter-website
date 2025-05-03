@@ -33,14 +33,14 @@ defmodule OtterWebsiteWeb.Home.HomeLive do
         <span class="text-xl font-semibold">Connect with us</span>
         <div class="flex flex-col gap-y-2">
           <a href="https://matrix.to/#/!sUiINDKClsGLGRKAVI:matrix.org?via=matrix.org">
-            <div class="bg-white rounded-xl flex items-center gap-x-4 p-2">
+            <div class="bg-white hover:scale-105 transition duration-300 rounded-xl flex items-center gap-x-4 p-2 shadow">
               <img src="/images/matrix.svg" class="h-12"/>
               <span>FRA-UAS FLOSS-Meetup Room</span>
             </div>
           </a>
 
           <a href="https://hessen.social/@otter">
-            <div class="bg-white rounded-xl flex items-center gap-x-4 p-2">
+            <div class="bg-white hover:scale-105 transition duration-300 rounded-xl flex items-center gap-x-4 p-2 shadow">
               <img src="/images/mastodon.svg" class="h-12"/>
               <span>otter@hessen.social</span>
             </div>
@@ -52,7 +52,7 @@ defmodule OtterWebsiteWeb.Home.HomeLive do
         <span class="text-xl font-semibold">Posts</span>
 
         <%= for post <- @posts do %>
-          <a href={~p"/posts/#{post.identifier}"} class="bg-gray-100 rounded-xl p-4 w-full shadow">
+          <a href={~p"/posts/#{post.identifier}"} class="bg-gray-100 hover:bg-gray-200 transition duration-300 rounded-xl p-4 w-full shadow">
             <div class="flex justify-between">
                 <div class="flex gap-x-2">
                   <span class="text-gray-600">{Calendar.strftime(post.datetime, "%Y-%m-%d %I:%M %p")}</span>
