@@ -26,6 +26,7 @@ defmodule OtterWebsiteWeb.Router do
       live "/", Home.HomeLive
     end
 
+    get "/posts/:identifier", Posts.PostsController, :details
   end
 
   # Other scopes may use custom stacks.

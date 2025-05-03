@@ -18,11 +18,11 @@ defmodule OtterWebsiteWeb.Home.HomeLive do
 
       <div class="w-screen flex flex-col items-center justify-center gap-y-4">
         <h1 class="text-xl font-semibold">Next meetup</h1>
-          <div class="bg-gray-100 rounded-xl p-8 flex flex-col">
+          <div class="bg-gray-100 rounded-xl p-4 flex flex-col shadow-lg">
             <%= if is_nil(@next_meetup) do %>
               <span class="text-gray-600">No upcoming meetup</span>
             <% else %>
-              <span class="text-lg font-semibold">{Calendar.strftime(@next_meetup.date, "%A, %Y-%m-%d, %I:%M %p")}</span>
+              <span class="text-lg font-semibold">{Calendar.strftime(@next_meetup.date, "%A, %Y-%m-%d at %I:%M %p")}</span>
               <span class="">Room: {@next_meetup.room}</span>
               <.button phx-click="show_register_talk_modal" class="m-2">Register a talk</.button>
             <% end %>
@@ -48,25 +48,20 @@ defmodule OtterWebsiteWeb.Home.HomeLive do
         </div>
       </div>
 
-      <div class="w-screen flex flex-col items-center justify-center gap-y-8 px-12">
+      <div class="w-screen flex flex-col items-center justify-center gap-y-8 px-12 mb-8">
         <span class="text-xl font-semibold">Posts</span>
 
         <%= for post <- @posts do %>
-          <div class="bg-gray-100 rounded-xl p-2 w-full">
-            <div class="flex flex-col p-2 rounded-xl">
-              <div class="flex justify-between items-center">
-                <span class="text-xl font-extrabold"><%= post.title %></span>
-                <span class="font-semibold"><%= post.author %></span>
-              </div>
-              <span class="text-gray-700"><%= post.description %></span>
+          <a href={~p"/posts/#{post.identifier}"} class="bg-gray-100 rounded-xl p-4 w-full shadow">
+            <div class="flex justify-between">
+                <div class="flex gap-x-2">
+                  <span class="text-gray-600">{Calendar.strftime(post.datetime, "%Y-%m-%d %I:%M %p")}</span>
+                  <span class="font-bold">{post.title}</span>
+                </div>
+                <span>{post.author}</span>
             </div>
-
-            <hr class="mb-2"/>
-
-            <article class="prose">
-              <div><%= raw(post.body) %></div>
-            </article>
-          </div>
+            <span>{post.description}</span>
+          </a>
         <% end %>
       </div>
     </div>
