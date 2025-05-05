@@ -20,7 +20,7 @@ defmodule OtterWebsiteWeb.UserRegistrationController do
         |> UserAuth.log_in_user(user)
 
       {:error, %Ecto.Changeset{} = changeset} ->
-        render(conn, :new, changeset: changeset)
+        render(conn, :new, changeset: changeset, page_title: "Register")
     end
   end
 end
