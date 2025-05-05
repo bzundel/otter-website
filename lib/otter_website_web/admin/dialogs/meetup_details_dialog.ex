@@ -36,7 +36,13 @@ defmodule OtterWebsiteWeb.Admin.Dialogs.MeetupDetailsDialog do
         <span class="text-sm font-bold">Publish to mastodon</span>
         <!-- TODO implement publishing -->
         <!-- instead of having another modal plop up, show a preview of the toot here -->
-        <.button>Publish</.button>
+        <.button phx-click="publish_toot" phx-target={@myself}>Publish</.button>
+
+        <%= unless is_nil(@mastodon_status) do %>
+          <div class="text-center">
+            <span class="text-gray-600">{@mastodon_status}</span>
+          </div>
+        <% end %>
       </div>
     </div>
     """
@@ -47,6 +53,7 @@ defmodule OtterWebsiteWeb.Admin.Dialogs.MeetupDetailsDialog do
     socket =
       socket
       |> assign(:page_title, "Meetup details")
+      |> assign(:mastodon_status, nil)
 
     {:ok, socket}
   end
@@ -65,5 +72,12 @@ defmodule OtterWebsiteWeb.Admin.Dialogs.MeetupDetailsDialog do
     meetup = Meetups.get_meetup!(socket.assigns.meetup.id) # FIXME surely there is a hotter way to refresh the list
 
     {:noreply, assign(socket, :meetup, meetup)}
+  end
+
+  def handle_event("publish_toot", _params, socket) do
+    meetup = socket.assigns.meetup
+    {_, message} = OtterWebsite.Helpers.MastodonTooter.toot_meetup(meetup)
+
+    {:noreply, assign(socket, :mastodon_status, message)} # FIXME some way to check the status?
   end
 end

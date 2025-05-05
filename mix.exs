@@ -57,7 +57,8 @@ defmodule OtterWebsite.MixProject do
       {:dns_cluster, "~> 0.1.1"},
       {:bandit, "~> 1.5"},
       {:nimble_publisher, "~> 1.0"},
-      { :uuid, "~> 1.1" }
+      { :uuid, "~> 1.1" },
+      {:hunter, "~> 0.4"}
     ]
   end
 

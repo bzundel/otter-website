@@ -7,6 +7,10 @@
 # General application configuration
 import Config
 
+config :hunter,
+  mastodon_base_url: System.get_env("MASTODON_BASE_URL"),
+  mastodon_access_token: System.get_env("MASTODON_ACCESS_TOKEN")
+
 config :otter_website,
   ecto_repos: [OtterWebsite.Repo],
   generators: [timestamp_type: :utc_datetime]
