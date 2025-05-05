@@ -11,7 +11,6 @@ defmodule OtterWebsiteWeb.UserRegistrationController do
   end
 
   def create(conn, %{"user" => user_params}) do
-    IO.inspect(user_params)
     case Accounts.register_user(user_params) do
       {:ok, user} ->
         Accounts.mark_invitation_key_used(user_params["invitation_key"], user)

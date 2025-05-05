@@ -170,7 +170,6 @@ defmodule OtterWebsite.Accounts do
 
   def valid_invitation_key?(nil), do: false
   def valid_invitation_key?(key) do
-    IO.inspect(Repo.all(InvitationKey))
     case Repo.one(from ik in InvitationKey, where: ik.key == ^key and is_nil(ik.used_by)) do
       nil -> false
       _ -> true

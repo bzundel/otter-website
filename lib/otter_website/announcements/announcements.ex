@@ -14,8 +14,6 @@ defmodule OtterWebsite.Announcements do
   def all_tags, do: @tags
 
   def get_post_by_identifier!(identifier) do
-    IO.inspect(identifier, label: "Identifier")
-    IO.inspect(all_posts(), label: "Posts")
     Enum.find(all_posts(), &(&1.identifier == identifier)) || nil
   end
 end

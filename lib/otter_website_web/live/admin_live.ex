@@ -197,7 +197,6 @@ defmodule OtterWebsiteWeb.Live.AdminLive do
 
   # Confirm delete
   def handle_event("show_confirm_delete_item_dialog", %{"id" => id, "type" => type, "message" => message}, socket) do
-    IO.inspect(type, label: "Type to delete")
     socket =
       socket
       |> assign(:confirm_delete_message, message)

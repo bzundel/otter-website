@@ -11,7 +11,6 @@ defmodule OtterWebsiteWeb.Posts.PostsController do
         |> render(ErrorHTML, "404.html")
         |> halt()
       post ->
-        IO.inspect(post, label: "Post")
         render(conn, :post_details, post: post, page_title: post.title)
     end
   end
