@@ -1,0 +1,29 @@
+services:
+  web:
+    build: .
+    ports:
+      - "4000:4000"
+    environment:
+      DATABASE_URL: ${DATABASE_URL:-ecto://postgres:postgres@db/otter_website}
+      SECRET_KEY_BASE: ${SECRET_KEY_BASE:-l52VGtYbEHmKeokEQD59aBs8mgenNxRhIiyMGCvGhUB90STDCe0YLvfHmg2riHzj}
+      PHX_SERVER: true
+      PHX_HOST: ${PHX_HOST:-localhost} 
+    depends_on:
+      db:
+        condition: service_healthy
+  db:
+    image: postgres:17-bullseye
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER:-postgres}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-postgres}
+      POSTGRES_DB: ${POSTGRES_DB:-otter_website}
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+volumes:
+  pgdata:
