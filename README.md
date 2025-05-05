@@ -4,7 +4,7 @@ Website for the Frankfurt University of Applied Science's FLOSS-Meetup "OTTER", 
 
 ## Running instructions
 
-A running postgresql instance is required with username and password both being `postgres` (only for the time being, will be adaptable with environment variables in the future or can be changed in the file `config/dev.exs`). Then, run `mix deps.get` to install all relevant dependencies and `mix ecto.create` to generate the necessary database schema (running `mix ecto.migrate` may be necessary afterwards). To run the server, simple execute `mix phx.server` and the website will be reachable under `localhost:4000`.
+A running postgresql instance is required with username and password both being `postgres` (only for the time being, will be adaptable with environment variables in the future or can be changed in the file `config/dev.exs`). Then, run `mix deps.get` to install all relevant dependencies and `mix ecto.create` to create the database, followed by `mix ecto.migrate` to generate the tables. Running the seeding script with `mix run priv/repo/seeds.exs` will create an invitation key in the database with the value `INITIAL_ADMIN_KEY` so you can create an account (which will save to from having to manually create one in the database). To run the server, simple execute `mix phx.server` and the website will be reachable under `localhost:4000`.
 
 To enable publishing toots to Mastodon from the admin panel, one must also set the environment variables `MASTODON_BASE_URL` and `MASTODON_ACCESS_TOKEN` with the instance URL and application access token, respectively.
 
