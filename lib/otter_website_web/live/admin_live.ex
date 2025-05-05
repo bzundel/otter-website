@@ -12,7 +12,7 @@ defmodule OtterWebsiteWeb.Live.AdminLive do
   @impl true
   def render(assigns) do
     ~H"""
-    <div class="mx-auto max-w-2xl">
+    <div class="mx-auto max-w-2xl px-2">
       <div class="flex flex-col gap-y-8 items-center my-4 w-full">
         <span class="text-xl font-bold">Admin Board</span>
 
@@ -25,22 +25,22 @@ defmodule OtterWebsiteWeb.Live.AdminLive do
           <% else %>
             <%= for meetup <- @meetups do %>
               <div class="flex gap-x-2">
-                <div class="flex justify-between grow bg-gray-100 rounded-xl p-2">
+                <div class="flex flex-col md:flex-row justify-between grow bg-gray-100 rounded-xl p-2">
                   {Calendar.strftime(meetup.date, "%a, %d. %B %Y, %I:%M %p")}
                   <span>{meetup.room}</span>
                   <!-- TODO show some indication if meetup is in the past (or don't show at all) -->
                 </div>
-                <.button class="bg-zinc-600 hover:bg-zinc-700"
+                <.button class="bg-zinc-600 hover:bg-zinc-700 my-auto"
                   phx-click="show_meetup_details_modal"
                   phx-value-id={meetup.id}>
-                  Show
+                  <.icon name="hero-magnifying-glass"/>
                 </.button>
-                <.button class="bg-red-600 hover:bg-red-700"
+                <.button class="bg-red-600 hover:bg-red-700 my-auto"
                   phx-click="show_confirm_delete_item_dialog"
                   phx-value-id={meetup.id}
                   phx-value-message="Are you sure you want to delete this meetup?"
                   phx-value-type={Meetup}>
-                  Delete
+                  <.icon name="hero-trash"/>
                 </.button>
               </div>
             <% end %>
@@ -53,20 +53,29 @@ defmodule OtterWebsiteWeb.Live.AdminLive do
           <.button phx-click="generate_new_key">Generate key</.button>
 
           <%= for key <- @keys do %>
-            <div class="flex items-center justify-around bg-gray-100 rounded-xl p-2 gap-x-8">
-              <span class="text-sm font-bold">{key.key}</span>
+            <div class="flex gap-x-2">
+              <div class="flex flex-col md:flex-row items-cetner justify-between bg-gray-100 rounded-xl p-2 grow">
+                <div class="flex gap-x-2">
+                  <span class="text-sm font-bold inline md:hidden">Key:</span>
+                  <span class="text-sm">{key.key}</span>
+                </div>
 
-              <%= if is_nil(key.used_by) do %>
-                <span class="text-sm">-</span>
-                <.button phx-click="show_confirm_delete_item_dialog"
-                  phx-value-id={key.id}
-                  phx-value-type={InvitationKey}
-                  phx-value-message="Are you sure you want to delete this invitation key?">
-                  Delete
-                </.button>
-              <% else %>
-                <span class="text-sm font-bold">{key.used_by}</span>
-              <% end %>
+                <div class="flex gap-x-2">
+                  <span class="text-sm font-bold inline md:hidden">Used by:</span>
+                  <%= if is_nil(key.used_by) do %>
+                    <span class="text-sm">-</span>
+                  <% else %>
+                    <span class="text-sm">{key.used_by}</span>
+                  <% end %>
+                </div>
+              </div>
+              <.button class="my-auto"
+                phx-click="show_confirm_delete_item_dialog"
+                phx-value-id={key.id}
+                phx-value-type={InvitationKey}
+                phx-value-message="Are you sure you want to delete this invitation key?">
+                <.icon name="hero-trash"/>
+              </.button>
             </div>
           <% end %>
         </div>

@@ -1,4 +1,4 @@
-<div class="mx-auto max-w-2xl py-4">
+<div class="mx-auto max-w-2xl py-4 px-2">
     <div class="flex flex-col gap-y-4">
         <a
             href={~p"/"}
@@ -8,20 +8,20 @@
             <span class="font-bold">Home</span>
         </a>
 
-        <div class="flex flex-col bg-gray-100 p-2 rounded-xl">
-            <div class="flex gap-x-2">
+        <div class="flex flex-col bg-gray-100 p-2 rounded-xl gap-y-2">
+            <div class="flex flex-col md:flex-row gap-x-2">
                 <span class="font-bold">Title:</span>
                 <span>{@post.title}</span>
             </div>
-            <div class="flex gap-x-2">
+            <div class="flex flex-col md:flex-row gap-x-2">
                 <span class="font-bold">Description:</span>
                 <span>{@post.description}</span>
             </div>
-            <div class="flex gap-x-2">
+            <div class="flex flex-col md:flex-row gap-x-2">
                 <span class="font-bold">Author:</span>
                 <span>{@post.author}</span>
             </div>
-            <div class="flex gap-x-2">
+            <div class="flex flex-col md:flex-row gap-x-2">
                 <span class="font-bold">Published:</span>
                 <span>{Calendar.strftime(@post.datetime, "%A, %Y-%m-%d, %I:%M %p")}</span>
             </div>

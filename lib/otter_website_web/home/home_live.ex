@@ -8,15 +8,15 @@ defmodule OtterWebsiteWeb.Home.HomeLive do
   def render(assigns) do
     ~H"""
     <div class="flex flex-col gap-y-12 p-x-8 mb-4">
-      <div class="w-screen bg-gray-200 flex items-center justify-center gap-12"> <!-- FIXME surely this does not work for mobile viewport -->
+      <div class="w-screen bg-gray-200 flex flex-col md:flex-row items-center justify-center md:gap-12">
         <img src="/images/logo.png" class="w-48"/>
-        <div class="text-center py-12 w-80">
+        <div class="text-center py-4 md:py-12 w-80">
           <h1 class="text-4xl font-extrabold">OTTER</h1>
           <h1 class="text-xl">Free/libre and open source software group at the Frankfurt University of Applied Sciences</h1>
         </div>
       </div>
 
-      <div class="w-screen flex flex-col items-center justify-center gap-y-4">
+      <div class="w-screen flex flex-col items-center justify-center gap-y-4 px-2">
         <h1 class="text-xl font-semibold">Next meetup</h1>
           <div class="bg-gray-100 rounded-xl p-4 flex flex-col shadow-lg">
             <%= if is_nil(@next_meetup) do %>
@@ -35,31 +35,32 @@ defmodule OtterWebsiteWeb.Home.HomeLive do
           <a href="https://matrix.to/#/!sUiINDKClsGLGRKAVI:matrix.org?via=matrix.org">
             <div class="bg-white hover:scale-105 transition duration-300 rounded-xl flex items-center gap-x-4 p-2 shadow">
               <img src="/images/matrix.svg" class="h-12"/>
-              <span>FRA-UAS FLOSS-Meetup Room</span>
+              <span class="font-bold">FRA-UAS FLOSS-Meetup Room</span>
             </div>
           </a>
 
           <a href="https://hessen.social/@otter">
             <div class="bg-white hover:scale-105 transition duration-300 rounded-xl flex items-center gap-x-4 p-2 shadow">
               <img src="/images/mastodon.svg" class="h-12"/>
-              <span>otter@hessen.social</span>
+              <span class="font-bold">otter@hessen.social</span>
             </div>
           </a>
         </div>
       </div>
 
-      <div class="w-screen flex flex-col items-center justify-center gap-y-8 px-12 mb-8">
+      <div class="w-screen flex flex-col items-center justify-center gap-y-4 px-4 mb:px-12 mb-2">
         <span class="text-xl font-semibold">Posts</span>
 
         <%= for post <- @posts do %>
           <a href={~p"/posts/#{post.identifier}"} class="bg-gray-100 hover:bg-gray-200 transition duration-300 rounded-xl p-4 w-full shadow">
-            <div class="flex justify-between">
-                <div class="flex gap-x-2">
+            <div class="flex flex-col md:flex-row md:justify-between">
+                <div class="flex flex-col md:flex-row md:gap-x-2">
                   <span class="text-gray-600">{Calendar.strftime(post.datetime, "%Y-%m-%d %I:%M %p")}</span>
                   <span class="font-bold">{post.title}</span>
                 </div>
                 <span>{post.author}</span>
             </div>
+            <hr class="my-2"/>
             <span>{post.description}</span>
           </a>
         <% end %>

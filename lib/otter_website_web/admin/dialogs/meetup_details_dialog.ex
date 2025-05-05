@@ -19,12 +19,12 @@ defmodule OtterWebsiteWeb.Admin.Dialogs.MeetupDetailsDialog do
             <div class="flex flex-col gap-y-2">
               <%= for talk <- @meetup.talks do %>
                 <div class="flex gap-x-2">
-                  <div class="flex justify-between grow bg-gray-100 rounded-xl p-2">
+                  <div class="flex flex-col grow bg-gray-100 rounded-xl p-2">
                     <span class="font-semibold">{talk.title}</span>
-                    <span>{talk.author}</span>
+                    <span class="text-gray-600">{talk.author}</span>
                   </div>
-                  <.button class="bg-red-600 hover:bg-red-700" phx-click="delete_talk" phx-value-id={talk.id} phx-target={@myself}>
-                    Delete
+                  <.button class="bg-red-600 hover:bg-red-700 my-auto" phx-click="delete_talk" phx-value-id={talk.id} phx-target={@myself}>
+                    <.icon name="hero-trash"/>
                   </.button>
                 </div>
               <% end %>
