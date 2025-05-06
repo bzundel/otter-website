@@ -8,6 +8,8 @@ services:
       SECRET_KEY_BASE: ${SECRET_KEY_BASE:-l52VGtYbEHmKeokEQD59aBs8mgenNxRhIiyMGCvGhUB90STDCe0YLvfHmg2riHzj}
       PHX_SERVER: true
       PHX_HOST: ${PHX_HOST:-localhost} 
+      MASTODON_BASE_URL: ${MASTODON_BASE_URL}
+      MASTODON_ACCESS_TOKEN: ${MASTODON_ACCESS_TOKEN}
     depends_on:
       db:
         condition: service_healthy
