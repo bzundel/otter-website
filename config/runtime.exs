@@ -20,6 +20,11 @@ if System.get_env("PHX_SERVER") do
   config :otter_website, OtterWebsiteWeb.Endpoint, server: true
 end
 
+config :hunter,
+  mastodon_base_url: System.get_env("MASTODON_BASE_URL"),
+  mastodon_access_token: System.get_env("MASTODON_ACCESS_TOKEN")
+
+
 if config_env() == :prod do
   database_url =
     System.get_env("DATABASE_URL") ||
