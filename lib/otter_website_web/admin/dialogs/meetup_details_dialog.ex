@@ -1,4 +1,5 @@
 defmodule OtterWebsiteWeb.Admin.Dialogs.MeetupDetailsDialog do
+alias OtterWebsite.Helpers.MastodonTooter
   use OtterWebsiteWeb, :live_component
 
   alias OtterWebsite.Meetups.Meetup
@@ -34,8 +35,11 @@ defmodule OtterWebsiteWeb.Admin.Dialogs.MeetupDetailsDialog do
 
       <div class="flex flex-col gap-y-4">
         <span class="text-sm font-bold">Publish to mastodon</span>
-        <!-- TODO implement publishing -->
-        <!-- instead of having another modal plop up, show a preview of the toot here -->
+
+        <div class="p-2 bg-gray-100 rounded">
+          <pre class="text-wrap">{MastodonTooter.create_message(@meetup)}</pre>
+        </div>
+
         <.button phx-click="publish_toot" phx-target={@myself}>Publish</.button>
 
         <%= unless is_nil(@mastodon_status) do %>
@@ -62,7 +66,12 @@ defmodule OtterWebsiteWeb.Admin.Dialogs.MeetupDetailsDialog do
   def update(assigns, socket) do
     meetup = Meetups.get_meetup!(assigns.meetup_id)
 
-    {:ok, assign(socket, :meetup, meetup)}
+    socket =
+      socket
+      |> assign(:meetup, meetup)
+      |> assign(:toot_preview, MastodonTooter.create_message(meetup))
+
+    {:ok, socket}
   end
 
   @impl true
@@ -71,12 +80,17 @@ defmodule OtterWebsiteWeb.Admin.Dialogs.MeetupDetailsDialog do
     Repo.delete(talk)
     meetup = Meetups.get_meetup!(socket.assigns.meetup.id) # FIXME surely there is a hotter way to refresh the list
 
-    {:noreply, assign(socket, :meetup, meetup)}
+    socket =
+      socket
+      |> assign(:meetup, meetup)
+      |> assign(:toot_preview, MastodonTooter.create_message(meetup))
+
+    {:noreply, socket}
   end
 
   def handle_event("publish_toot", _params, socket) do
     meetup = socket.assigns.meetup
-    {_, message} = OtterWebsite.Helpers.MastodonTooter.toot_meetup(meetup)
+    {_, message} = MastodonTooter.toot_meetup(meetup)
 
     {:noreply, assign(socket, :mastodon_status, message)} # FIXME some way to check the status?
   end

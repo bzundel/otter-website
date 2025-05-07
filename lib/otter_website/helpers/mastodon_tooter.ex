@@ -19,7 +19,12 @@ defmodule OtterWebsite.Helpers.MastodonTooter do
     greeting = "Am #{Calendar.strftime(meetup.date, "%Y-%m-%d")} um #{Calendar.strftime(meetup.date, "%H:%M Uhr")} treffen wir uns wieder in Raum #{meetup.room}!"
     talks = "Folgende Talks sind angemeldet:\n" <> Enum.join(Enum.map(meetup.talks, fn talk -> "- #{talk.author}: \"#{talk.title}\"" end), "\n")
     ending = "Wir freuen uns euch dort zu sehen!"
-    message_components = [greeting, talks, ending]
+
+    message_components = if Enum.empty?(meetup.talks) do
+      [greeting, ending]
+    else
+      [greeting, talks, ending]
+    end
 
     Enum.join(message_components, "\n\n")
   end
