@@ -29,7 +29,7 @@ defmodule OtterWebsiteWeb.Home.HomeLive do
           </div>
       </div>
 
-      <div class="flex flex-col items-center justify-center gap-y-2">
+      <div class="flex flex-col items-center justify-center gap-y-2 px-2">
         <h1 class="text-xl font-semibold">Who are we?</h1>
         <div class="max-w-2xl text-justify">
           We are a group of people who agree with and support the principles of libre software. To spread the idea and create a room for people interested in the philosophy, we founded OTTER, a free/libre and open source software group at the Frankfurt University of Applied Sciences. Anyone who wants to learn about the movement, share some experiences, work on some open projects together, meet some like-minded people or just talk about nerdy things is welcome to come to our regular meetups!
