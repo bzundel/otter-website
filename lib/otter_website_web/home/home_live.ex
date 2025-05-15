@@ -39,7 +39,7 @@ defmodule OtterWebsiteWeb.Home.HomeLive do
       <div class="w-screen flex flex-col items-center justify-center gap-y-4 bg-gray-100 p-4">
         <span class="text-xl font-semibold">Connect with us</span>
         <div class="flex flex-col gap-y-2">
-          <a href="https://matrix.to/#/!sUiINDKClsGLGRKAVI:matrix.org?via=matrix.org">
+          <a href="https://matrix.to/#/#otter-frauas:matrix.org">
             <div class="bg-white hover:scale-105 transition duration-300 rounded-xl flex items-center gap-x-4 p-2 shadow">
               <img src="/images/matrix.svg" class="h-12"/>
               <span class="font-bold">FRA-UAS FLOSS-Meetup Room</span>
